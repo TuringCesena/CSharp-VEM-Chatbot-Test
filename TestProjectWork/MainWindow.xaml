@@ -1,0 +1,35 @@
+﻿<Window x:Name="wndMain" x:Class="TestProjectWork.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TestProjectWork"
+        mc:Ignorable="d"
+        Title="VEM Chatbot Test" Height="552.4" Width="869.833">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="1.8*"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid x:Name="settingsColumn" Grid.Column="0">
+            <Button x:Name="btnDomande" Width="90" HorizontalAlignment="Center" Margin="10,10,10,0" VerticalAlignment="Top" Height="30" Click="btnDomande_Click">Domande</Button>
+        </Grid>
+        <Grid x:Name="centerColumn" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Label FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Top" >VEM Chatbot Test</Label>
+            <DataGrid x:Name="grdEsito" Grid.Row="1"></DataGrid>
+        </Grid>
+        <Grid x:Name="rightColumn" Grid.Column="2">
+
+        </Grid>
+
+
+    </Grid>
+</Window>
