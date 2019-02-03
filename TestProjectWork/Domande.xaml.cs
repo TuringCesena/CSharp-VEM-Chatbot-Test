@@ -59,16 +59,29 @@ namespace TestProjectWork
             dgrDomande.IsReadOnly = false;
         }
 
-        private void btnCloseWithoutSaving_Click(object sender, RoutedEventArgs e)
+    
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            this.Close();
+            e.Cancel = true;
+
+            var msg = MessageBox.Show("Salvare?", this.Title, MessageBoxButton.YesNo);
+
+            if (msg == MessageBoxResult.Yes)
+            {
+                Salva();
+                
+            }
+
+            e.Cancel = false;
+
         }
 
-        private void btnCloseWIthSaving_Click(object sender, RoutedEventArgs e)
+        void Salva()
         {
             List<Query> queries = new List<Query>();
 
-            foreach(Query query in dgrDomande.ItemsSource)
+            foreach (Query query in dgrDomande.ItemsSource)
             {
                 queries.Add(query);
             }
@@ -79,7 +92,7 @@ namespace TestProjectWork
             sw.Close();
         }
 
-        private void grdPrincipal_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        private void btnOpenFile_Click(object sender, RoutedEventArgs e)
         {
             Process.Start("notepad", Environment.CurrentDirectory + "\\Files\\Domande.json");
         }

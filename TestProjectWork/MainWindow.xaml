@@ -5,18 +5,32 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TestProjectWork"
         mc:Ignorable="d"
-        Title="VEM Chatbot Test" Height="552.4" Width="869.833">
+        Title="VEM Chatbot Test" Height="552.4" Width="1013.833">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
-            <ColumnDefinition Width="1.8*"></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="235*"></ColumnDefinition>
+            <ColumnDefinition Width="506*"></ColumnDefinition>
+            <ColumnDefinition Width="266*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Grid x:Name="settingsColumn" Grid.Column="0">
+        <StackPanel Orientation="Vertical" x:Name="settingsColumn" Grid.Column="0" Margin="5,5,10.2,5.4">
             <Button x:Name="btnDomande" Width="90" HorizontalAlignment="Center" Margin="10,10,10,0" VerticalAlignment="Top" Height="30" Click="btnDomande_Click">Domande</Button>
-        </Grid>
-        <Grid x:Name="centerColumn" Grid.Column="1">
+            <Label HorizontalAlignment="Center" Margin="0,20,0,0" FontSize="16" Content="Impostazioni API:"/>
+            <DockPanel>
+                <Label>URL:</Label>
+                <TextBox x:Name="txtUrl" TextChanged="txtUrl_TextChanged"/>
+            </DockPanel>
+            <DockPanel Margin="0,5,0,0">
+                <Label>Token:</Label>
+                <TextBox x:Name="txtToken" TextChanged="txtToken_TextChanged"/>
+            </DockPanel>
+            <DockPanel Margin="0,5,0,0">
+                <Label>Linguaggio:</Label>
+                <TextBox x:Name="txtLang" TextChanged="txtLang_TextChanged"/>
+            </DockPanel>
+            <Button x:Name="btnAggiornaAPI" Margin="0,5,0,0" HorizontalAlignment="Center" Padding="10,5" IsEnabled="False" Click="btnAggiornaAPI_Click">Aggiorna</Button>
+        </StackPanel>
+        <Grid x:Name="centerColumn" Grid.Column="1" Margin="4.8,5,6.6,5.4">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition></RowDefinition>
@@ -24,10 +38,25 @@
             </Grid.RowDefinitions>
 
             <Label FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Top" >VEM Chatbot Test</Label>
-            <DataGrid x:Name="grdEsito" Grid.Row="1"></DataGrid>
+            <DataGrid x:Name="grdEsito" Grid.Row="1" Margin="5"></DataGrid>
+
+            <DockPanel Grid.Row="2">
+                <Button x:Name="btnTest" Click="btnTest_Click">Esegui i test</Button>
+            </DockPanel>
         </Grid>
         <Grid x:Name="rightColumn" Grid.Column="2">
-
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            
+            <Label HorizontalAlignment="Center" FontSize="16" Content="Testa manualmente il chatbot"/>
+            <local:BotWindow Margin="0,0,0,0" Grid.Row="1"></local:BotWindow>
+            <DockPanel Grid.Row="2">
+                <TextBox HorizontalContentAlignment="Stretch" VerticalAlignment="Top"/>
+                <Button HorizontalAlignment="Right" Padding="5">Parla!</Button>
+            </DockPanel>
         </Grid>
 
 

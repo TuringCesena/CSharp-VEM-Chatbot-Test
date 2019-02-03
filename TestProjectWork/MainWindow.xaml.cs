@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Net.Http;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace TestProjectWork
 {
@@ -28,12 +29,23 @@ namespace TestProjectWork
         public MainWindow()
         {
             InitializeComponent();
+
+            ImportaImpostazioni();
         }
 
-        private void btnSend_Click(object sender, RoutedEventArgs e)
+        void ImportaImpostazioni()
         {
-            //lblResponse.Content = GetResult(txtQuestion.Text);
+            StreamReader sr = new StreamReader("Files\\Impostazioni.json");
+            string impostazioni = sr.ReadToEnd();
+            sr.Close();
 
+            Settings sett = JsonConvert.DeserializeObject<Settings>(impostazioni);
+
+            txtUrl.Text = sett.url;
+            txtToken.Text = sett.token;
+            txtLang.Text = sett.language;
+
+            btnAggiornaAPI.IsEnabled = false;
         }
 
         public string GetResult(string query)
@@ -69,10 +81,66 @@ namespace TestProjectWork
 
         }
 
+        void IniziaTest()
+        {
+            List<string> l = GetQuery.GetJSON();
+            List<Test> tests = new List<Test>();
+
+            foreach(string s in l)
+            {
+                Test test = new Test();
+                test.query = s;
+                test.response = GetResult(s);
+                tests.Add(test);
+            }
+
+            grdEsito.ItemsSource = tests;
+        }
+
         private void btnDomande_Click(object sender, RoutedEventArgs e)
         {
             Domande dom = new Domande();
             dom.ShowDialog();
+        }
+
+        private void txtUrl_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            btnAggiornaAPI.IsEnabled = true;
+        }
+
+        private void txtToken_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            btnAggiornaAPI.IsEnabled = true;
+        }
+
+        private void txtLang_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            btnAggiornaAPI.IsEnabled = true;
+        }
+
+        private void btnAggiornaAPI_Click(object sender, RoutedEventArgs e)
+        {
+            btnAggiornaAPI.IsEnabled = false;
+
+            Settings sett = new Settings();
+            sett.url = txtUrl.Text;
+            sett.token = txtToken.Text;
+            sett.language = txtLang.Text;
+
+            StreamWriter sw = new StreamWriter("Files\\Impostazioni.json");
+            sw.Write(JsonConvert.SerializeObject(sett));
+            sw.Close();
+            
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnTest_Click(object sender, RoutedEventArgs e)
+        {
+            IniziaTest();
         }
     }
 }
