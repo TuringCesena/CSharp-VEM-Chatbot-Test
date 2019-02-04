@@ -25,24 +25,34 @@ namespace TestProjectWork
             InitializeComponent();
         }
 
-        public void AddQuestion(string text)
+        public void AddQuestion(string text, double wndWidth)
         {
 
             TextBlock tb = new TextBlock();
             tb.HorizontalAlignment = HorizontalAlignment.Right;
             tb.FontSize = 16;
-            tb.MaxWidth = uc.Width / (4 / 3);
             tb.Background = Brushes.LightBlue;
             tb.Margin = new Thickness(5,5,5,5);
             tb.TextWrapping = TextWrapping.Wrap;
             tb.Text = text;
 
             Grid g = new Grid();
+            g.ColumnDefinitions.Add(new ColumnDefinition());
+            g.ColumnDefinitions.Add(new ColumnDefinition());
+            g.ColumnDefinitions.Add(new ColumnDefinition());
+            
             g.VerticalAlignment = VerticalAlignment.Top;
             g.Width = uc.Width;
             g.Children.Add(tb);
 
+            Grid g1 = new Grid();
+            g1.SetValue(Grid.ColumnSpanProperty, 2);
+            g1.SetValue(Grid.ColumnProperty, 1);
+
             w.Children.Add(g);
+            g.Children.Add(g1);
+            g1.Children.Add(tb);
+            
         }
 
         public void AddReply(string text)
@@ -57,11 +67,18 @@ namespace TestProjectWork
             tb.TextWrapping = TextWrapping.Wrap;
             tb.Text = text;
 
+            Grid g1 = new Grid();
+            g1.SetValue(Grid.ColumnSpanProperty, 2);
+
             Grid g = new Grid();
+            g.ColumnDefinitions.Add(new ColumnDefinition());
+            g.ColumnDefinitions.Add(new ColumnDefinition());
+            g.ColumnDefinitions.Add(new ColumnDefinition());
             g.VerticalAlignment = VerticalAlignment.Top;
             g.Width = uc.Width;
-            g.Children.Add(tb);
 
+            g1.Children.Add(tb);
+            g.Children.Add(g1);
             w.Children.Add(g);
         }
     }

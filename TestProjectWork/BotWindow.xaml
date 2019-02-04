@@ -5,10 +5,31 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TestProjectWork"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="342.95" Background="White">
+             d:DesignHeight="450" d:DesignWidth="342.95" Background="#FFE5DBDB" Width="342">
     <ScrollViewer x:Name="s" VerticalScrollBarVisibility="Auto">
-        <WrapPanel x:Name="w" ItemWidth="340" Orientation="Vertical">
+        <WrapPanel x:Name="w" ItemWidth="342" Orientation="Vertical">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
 
+                <Grid Grid.ColumnSpan="2" Height="30" Background="Aquamarine">
+                    <TextBlock>Ciao</TextBlock>
+                </Grid>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.ColumnSpan="2" Grid.Column="1" Height="30" Background="Aquamarine">
+
+                </Grid>
+            </Grid>
         </WrapPanel>
     </ScrollViewer>
 </UserControl>

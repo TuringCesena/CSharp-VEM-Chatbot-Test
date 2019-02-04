@@ -31,6 +31,8 @@ namespace TestProjectWork
             InitializeComponent();
 
             ImportaImpostazioni();
+
+            bw.Width = rightColumn.Width;
         }
 
         void ImportaImpostazioni()
@@ -141,6 +143,12 @@ namespace TestProjectWork
         private void btnTest_Click(object sender, RoutedEventArgs e)
         {
             IniziaTest();
+        }
+
+        private void btnSendQuery_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show((rightColumn.Width).ToString());
+            bw.AddQuestion(txtQueryBot.Text, rightColumn.Width);
         }
     }
 }
