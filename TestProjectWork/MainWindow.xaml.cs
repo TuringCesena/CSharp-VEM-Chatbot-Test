@@ -147,8 +147,8 @@ namespace TestProjectWork
 
         private void btnSendQuery_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show((rightColumn.Width).ToString());
             bw.AddQuestion(txtQueryBot.Text, rightColumn.Width);
+            bw.AddReply(GetResult(txtQueryBot.Text), rightColumn.Width);
         }
     }
 }
