@@ -1,0 +1,6 @@
+﻿{
+  "rootUrl": "https://turing2019.azurewebsites.net",
+  "urlChat": "api/chat",
+  "urlNews": "api/news",
+  "urlServizi":  "api/servizi"
+}
