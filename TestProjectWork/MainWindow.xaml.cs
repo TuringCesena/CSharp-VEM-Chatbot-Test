@@ -15,140 +15,278 @@ using System.Windows.Shapes;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.IO;
+using System.Threading;
+using System.Text.RegularExpressions;
 
 namespace TestProjectWork
 {
-    /// <summary>
-    /// Logica di interazione per MainWindow.xaml
-    /// </summary>
+    
+
     public partial class MainWindow : Window
     {
-        string url = "https://api.api.ai/v1/query?v=20150910";
-        string token = "cb7af0ed21dd41d9bac5c64afcc45b27";
+        int newsState = 0;
+        int serviziState = 0;
+        bool newsImplementate = true;
+
+        public static string urlNewsCompleto;
+        public static string urlChatCompleto;
+        public static string urlServiziCompleto;
 
         public MainWindow()
         {
             InitializeComponent();
 
+            btnNewsAll.IsEnabled = false;
+            btnNewsOne.IsEnabled = true;
+            btnNewsUser.IsEnabled = true;
+            btnSaveSettings.IsEnabled = false;
+            grdNewsChoose.Visibility = Visibility.Collapsed;
+
             ImportaImpostazioni();
-
-            bw.Width = rightColumn.Width;
+            InizializzaNews(0);
+            InizializzaServizi(0);
         }
 
-        void ImportaImpostazioni()
+        public void ImportaImpostazioni()
         {
-            StreamReader sr = new StreamReader("Files\\Impostazioni.json");
-            string impostazioni = sr.ReadToEnd();
-            sr.Close();
+            UpdateStatus(0, "Caricamento delle impostazioni in corso");
+            ManageSettings.ImportSettings("Settings.json");
+            txtSettingsRoot.Text = Settings.rootUrl;
+            txtSettingsApiChat.Text = Settings.urlChat;
+            txtSettingsApiNews.Text = Settings.urlNews;
+            txtSettingsApiServizi.Text = Settings.urlServizi;
+            UpdateStatus(0, "Caricamento delle impostazioni completato");
 
-            Settings sett = JsonConvert.DeserializeObject<Settings>(impostazioni);
-
-            txtUrl.Text = sett.url;
-            txtToken.Text = sett.token;
-            txtLang.Text = sett.language;
-
-            btnAggiornaAPI.IsEnabled = false;
+            urlChatCompleto = Settings.rootUrl + "/" + Settings.urlChat;
+            urlServiziCompleto = Settings.rootUrl + "/" + Settings.urlServizi;
+            urlNewsCompleto = Settings.rootUrl + "/" + Settings.urlNews;
         }
 
-        public string GetResult(string query)
+        public async void InizializzaNews(int type, int num = 0)
         {
-            string json = DoRequest(query, "en", "somerandomthing");
-            QueryResult qr = JsonConvert.DeserializeObject<QueryResult>(json);
-            return qr.result.fulfillment.speech;
-        }
-
-        public string DoRequest(string text, string language, string sessionID)
-        {
-
-            Dictionary<string, string> body = new Dictionary<string, string>
+            if (!newsImplementate)
             {
-                { "query", text },
-                { "lang", language },
-                { "sessionId", sessionID }
-            };
-
-            var data = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
-            var result = "";
-
-            HttpClient client = new HttpClient();
-
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
-            var response = client.PostAsync(url, data).Result;
-
-            using (HttpContent content = response.Content)
-            {
-                result = response.Content.ReadAsStringAsync().Result;
-                return result.ToString();
+                return;
             }
 
-        }
-
-        void IniziaTest()
-        {
-            List<string> l = GetQuery.GetJSON();
-            List<Test> tests = new List<Test>();
-
-            foreach(string s in l)
-            {
-                Test test = new Test();
-                test.query = s;
-                test.response = GetResult(s);
-                tests.Add(test);
-            }
-
-            grdEsito.ItemsSource = tests;
-        }
-
-        private void btnDomande_Click(object sender, RoutedEventArgs e)
-        {
-            Domande dom = new Domande();
-            dom.ShowDialog();
-        }
-
-        private void txtUrl_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            btnAggiornaAPI.IsEnabled = true;
-        }
-
-        private void txtToken_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            btnAggiornaAPI.IsEnabled = true;
-        }
-
-        private void txtLang_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            btnAggiornaAPI.IsEnabled = true;
-        }
-
-        private void btnAggiornaAPI_Click(object sender, RoutedEventArgs e)
-        {
-            btnAggiornaAPI.IsEnabled = false;
-
-            Settings sett = new Settings();
-            sett.url = txtUrl.Text;
-            sett.token = txtToken.Text;
-            sett.language = txtLang.Text;
-
-            StreamWriter sw = new StreamWriter("Files\\Impostazioni.json");
-            sw.Write(JsonConvert.SerializeObject(sett));
-            sw.Close();
             
+
+            List<Structures.api_news> tabella = new List<Structures.api_news>();
+            UpdateStatus(0, "Download delle news in corso");
+            
+            try { 
+                switch (type)
+                {
+                    case 0:
+                        tabella = await Task.Run(() => GetQuery.GetNews());
+                        dgrNews.ItemsSource = tabella;
+                        lblHttpNews.Content = Settings.urlNews;
+                        await UpdateStatus(0, "Download delle news completato");
+                        break;
+                    case 1:
+                        tabella = await Task.Run(() => GetQuery.GetOneNews(num));
+                        dgrNews.ItemsSource = tabella;
+                        lblHttpNews.Content = Settings.urlNews + "/" + num.ToString();
+                        await UpdateStatus(0, "Download delle news completato");
+                        break;
+                    case 2:
+                        tabella = await Task.Run(() => GetQuery.GetNewsFromUser(num));
+                        dgrNews.ItemsSource = tabella;
+                        lblHttpNews.Content = Settings.urlNews + "/users/" + num.ToString();
+                        await UpdateStatus(0, "Download delle news completato");
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                await UpdateStatus(1, "Errore durante il download delle news: " + e.Message.ToString());
+            }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        public async void InizializzaServizi(int type, int num = 0)
         {
+            List<Structures.api_servizi> tabella;
+            UpdateStatus(0, "Download dei servizi in corso");
+
+            try
+            {
+                switch (type)
+                {
+                    case 0:
+                        tabella = await Task.Run(() => GetQuery.GetServizi());
+                        dgrServizi.ItemsSource = tabella;
+                        lblHttpServizi.Content = Settings.urlServizi;
+
+                        UpdateStatus(0, "Download dei servizi completato");
+                        break;
+                    case 1:
+                        tabella = await Task.Run(() => GetQuery.GetOneServizio(num));
+                        dgrServizi.ItemsSource = tabella;
+                        lblHttpServizi.Content = Settings.urlServizi;
+
+                        UpdateStatus(0, "Download dei servizi completato");
+                        break;
+                    case 2:
+                        tabella = await Task.Run(() => GetQuery.GetServiziUser(num));
+                        dgrServizi.ItemsSource = tabella;
+                        lblHttpServizi.Content = Settings.urlServizi;
+
+                        UpdateStatus(0, "Download dei servizi completato");
+                        break;
+                }
+                
+
+            }
+
+            catch (Exception e)
+            {
+                UpdateStatus(1, "Download dei servizi fallito: " + e.Message.ToString());
+            }
+        }
+
+
+        async Task UpdateStatus(int type, string message)
+        {
+
+            switch (type)
+            {
+                case 0:
+                    imgStatus.Source = new BitmapImage(new Uri("img\\icons\\Check.png", UriKind.RelativeOrAbsolute));
+                    lblStatus.Content = message;
+                    break;
+                case 1:
+                    imgStatus.Source = new BitmapImage(new Uri("img\\icons\\Error.png", UriKind.RelativeOrAbsolute));
+                    lblStatus.Content = message;
+                    break;
+            }
+        }
+
+        void NewsControllaNumero()
+        {
+            int.TryParse(txtNewsID.Text, out int r);
+        }
+
+        private void btnNewsAll_Click(object sender, RoutedEventArgs e)
+        {
+            newsState = 0;
+
+            btnNewsAll.IsEnabled = false;
+            btnNewsOne.IsEnabled = true;
+            btnNewsUser.IsEnabled = true;
+            grdNewsChoose.Visibility = Visibility.Collapsed;
+
+            InizializzaNews(0);
 
         }
 
-        private void btnTest_Click(object sender, RoutedEventArgs e)
+        private void btnNewsOne_Click(object sender, RoutedEventArgs e)
         {
-            IniziaTest();
+            newsState = 1;
+
+            btnNewsAll.IsEnabled = true;
+            btnNewsOne.IsEnabled = false;
+            btnNewsUser.IsEnabled = true;
+            grdNewsChoose.Visibility = Visibility.Visible;
+
+            InizializzaNews(newsState, int.Parse(txtNewsID.Text));
         }
 
-        private void btnSendQuery_Click(object sender, RoutedEventArgs e)
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
-            bw.AddQuestion(txtQueryBot.Text, rightColumn.Width);
-            bw.AddReply(GetResult(txtQueryBot.Text), rightColumn.Width);
+            Regex regex = new Regex("\\d");
+            if (!regex.IsMatch(e.Text) && e.Text.IsNumeric())
+            { 
+                e.Handled = true;
+            }
+        }
+
+        private void btnNewsUser_Click(object sender, RoutedEventArgs e)
+        {
+            newsState = 2;
+
+            btnNewsAll.IsEnabled = true;
+            btnNewsOne.IsEnabled = true;
+            btnNewsUser.IsEnabled = false;
+            grdNewsChoose.Visibility = Visibility.Visible;
+
+            InizializzaNews(newsState, int.Parse(txtNewsID.Text));
+        }
+
+        private void txtNewsID_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            InizializzaNews(newsState, int.Parse(txtNewsID.Text));
+        }
+
+        private void SettingsTextChanged(object sender, TextChangedEventArgs e)
+        {
+            btnSaveSettings.IsEnabled = true;
+        }
+
+        private void btnSaveSettings_Click(object sender, RoutedEventArgs e)
+        {
+            ManageSettings.SaveSettings("Settings.json", new SSettings
+            {
+                rootUrl = txtSettingsRoot.Text,
+                urlChat = txtSettingsApiChat.Text,
+                urlNews = txtSettingsApiNews.Text,
+                urlServizi = txtSettingsApiServizi.Text
+            });
+
+            btnSaveSettings.IsEnabled = false;
+
+            ImportaImpostazioni();
+        }
+
+        private void btnServiziAll_Click(object sender, RoutedEventArgs e)
+        {
+            btnServiziOne.IsEnabled = true;
+            btnServiziUser.IsEnabled = true;
+            btnServiziAll.IsEnabled = false;
+
+            grdServiziChoose.Visibility = Visibility.Collapsed;
+
+            serviziState = 0;
+
+            InizializzaServizi(serviziState);
+
+
+        }
+
+        private void btnServiziOne_Click(object sender, RoutedEventArgs e)
+        {
+            btnServiziOne.IsEnabled = false;
+            btnServiziUser.IsEnabled = true;
+            btnServiziAll.IsEnabled = true;
+
+            grdServiziChoose.Visibility = Visibility.Visible;
+            txtServiziID.Focus();
+
+            serviziState = 1;
+            InizializzaServizi(serviziState, int.Parse(txtServiziID.Text));
+        }
+
+        private void btnServiziUser_Click(object sender, RoutedEventArgs e)
+        {
+            btnServiziOne.IsEnabled = true;
+            btnServiziUser.IsEnabled = false;
+            btnServiziAll.IsEnabled = true;
+
+            grdServiziChoose.Visibility = Visibility.Visible;
+            txtServiziID.Focus();
+
+            serviziState = 2;
+            InizializzaServizi(serviziState, int.Parse(txtServiziID.Text));
+        }
+
+        private void btnUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            InizializzaServizi(serviziState);
+            InizializzaNews(newsState);
+        }
+
+        private void btnNewsTest_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

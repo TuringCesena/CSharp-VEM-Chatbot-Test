@@ -5,60 +5,304 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TestProjectWork"
         mc:Ignorable="d"
-        Title="VEM Chatbot Test" Height="552.4" Width="1013.833">
+        Title="VEM Chatbot Test" Height="552.4" Width="686.833">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="235*"></ColumnDefinition>
-            <ColumnDefinition Width="506*"></ColumnDefinition>
-            <ColumnDefinition Width="266*"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+    <TabControl Margin="1,0,-1.2,25.4" Grid.RowSpan="2">
+            <TabItem IsSelected="True">
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" ToolTip="Chat">
+                            <Image x:Name="imgNewsError" Source="img\icons\Error.png" Height="10" Visibility="Visible"></Image>
+                            <Label Height="20" Padding="5,2,5,2">Chat</Label>
+                        </StackPanel>
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
 
-        <StackPanel Orientation="Vertical" x:Name="settingsColumn" Grid.Column="0" Margin="5,5,10.2,5.4">
-            <Button x:Name="btnDomande" Width="90" HorizontalAlignment="Center" Margin="10,10,10,0" VerticalAlignment="Top" Height="30" Click="btnDomande_Click">Domande</Button>
-            <Label HorizontalAlignment="Center" Margin="0,20,0,0" FontSize="16" Content="Impostazioni API:"/>
-            <DockPanel>
-                <Label>URL:</Label>
-                <TextBox x:Name="txtUrl" TextChanged="txtUrl_TextChanged"/>
-            </DockPanel>
-            <DockPanel Margin="0,5,0,0">
-                <Label>Token:</Label>
-                <TextBox x:Name="txtToken" TextChanged="txtToken_TextChanged"/>
-            </DockPanel>
-            <DockPanel Margin="0,5,0,0">
-                <Label>Linguaggio:</Label>
-                <TextBox x:Name="txtLang" TextChanged="txtLang_TextChanged"/>
-            </DockPanel>
-            <Button x:Name="btnAggiornaAPI" Margin="0,5,0,0" HorizontalAlignment="Center" Padding="10,5" IsEnabled="False" Click="btnAggiornaAPI_Click">Aggiorna</Button>
-        </StackPanel>
-        <Grid x:Name="centerColumn" Grid.Column="1" Margin="4.8,5,6.6,5.4">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-            </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.5*"></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
 
-            <Label FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Top" >VEM Chatbot Test</Label>
-            <DataGrid x:Name="grdEsito" Grid.Row="1" Margin="5"></DataGrid>
+                    <StackPanel Margin="5" VerticalAlignment="Top">
+                        <Label HorizontalAlignment="Center" FontSize="18" FontWeight="Bold">Impostazioni</Label>
+                        <Label HorizontalAlignment="Center">Interfaccia da visualizzare</Label>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
 
-            <DockPanel Grid.Row="2">
-                <Button x:Name="btnTest" Click="btnTest_Click">Esegui i test</Button>
-            </DockPanel>
-        </Grid>
-        <Grid x:Name="rightColumn" Grid.Column="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition Height="Auto"></RowDefinition>
-            </Grid.RowDefinitions>
+                            <Button x:Name="btnChatShowTest">Test automatici</Button>
+                            <Button x:Name="btnChatShowDomande" Grid.Column="1">Domande</Button>
+                        </Grid>
+                        <StackPanel Margin="0,25,0,0" x:Name="grdChatSettingsTest">
+                            <Label HorizontalAlignment="Center" FontSize="12">Test automatici</Label>
+                            <CheckBox x:Name="chkChatTestPoints" Margin="0,4,0,0">A punteggio</CheckBox>
+                            <Label HorizontalAlignment="Center" FontSize="12" Margin="0,15,0,0" FontWeight="Bold">Il punteggio dipende da:</Label>
+                            <local:FiveRating Header="Correttezza grammaticale"></local:FiveRating>
+                            <local:FiveRating Header="Intent corretto"></local:FiveRating>
+                        </StackPanel>
+                    </StackPanel>
+                    <DataGrid Grid.Column="1" Margin="5"></DataGrid>
+                </Grid>
+                
+            </TabItem>
+            <TabItem>
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" ToolTip="Ciao">
+                            <Image x:Name="imgNewsError" Source="img\icons\Error.png" Height="10" Visibility="Collapsed"></Image>
+                            <Label Height="20" Padding="5,2,5,2">Console</Label>
+                        </StackPanel>
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel VerticalAlignment="Top" x:Name="grdConsoleBody">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.5*"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Background="LightBlue" BorderThickness="5" HorizontalAlignment="Right" Grid.Column="1" >Ciaoooooosssssssssssssssssssssooooooooooo</Label>
+                        </Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition Width="0.5*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Background="Yellow" BorderThickness="5" HorizontalAlignment="Left" >Ciaooooooooooooooooo</Label>
+                        </Grid>
+                    </StackPanel>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="txtConsoleMessage"></TextBox>
+                        <Button Grid.Column="1" x:Name="btnConsoleSendMessage">Invia messaggio</Button>
+                    </Grid>
+                </Grid>
+
+            </TabItem>
+            <TabItem>
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" ToolTip="Ciao">
+                            <Image x:Name="imgNewsError" Source="img\icons\Error.png" Height="10" Visibility="Collapsed"></Image>
+                            <Label Height="20" Padding="5,2,5,2">News</Label>
+                        </StackPanel>
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+            <Grid x:Name="grdNews" Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.5*"></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition Height="0.7*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <StackPanel x:Name="grdNewsSettings" VerticalAlignment="Top" Grid.RowSpan="2">
+                    <Label HorizontalAlignment="Center" FontSize="18" FontWeight="Bold">Impostazioni</Label>
+                    <Label HorizontalAlignment="Center">Quali news visualizzo?</Label>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+
+                        <Button x:Name="btnNewsAll" Grid.Column="0" IsEnabled="False" Click="btnNewsAll_Click">Tutte</Button>
+                        <Button x:Name="btnNewsOne" Grid.Column="1" Click="btnNewsOne_Click">Una sola</Button>
+                        <Button x:Name="btnNewsUser" Grid.Column="2" Click="btnNewsUser_Click">Utente</Button>
+                            <Grid x:Name="grdNewsChoose" Visibility="Visible" Grid.Row="1" Grid.ColumnSpan="3" Margin="0,5,0,0">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Label x:Name="lblNewsID">Che ID ha la news?</Label>
+                                    <TextBox x:Name="txtNewsID" Width="40" PreviewTextInput="NumberValidationTextBox" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextChanged="txtNewsID_TextChanged">1</TextBox>
+                                </StackPanel>
+                            </Grid>
+                    </Grid>
+                    
+                    <Label HorizontalAlignment="Center" Margin="0,10,0,0">Comando HTTP eseguito:</Label>
+                        <Label x:Name="lblHttpNews" HorizontalAlignment="Center" Margin="0,-8,0,0"></Label>
+                        <GroupBox Header="Test automatici" Margin="0,10,0,0">
+                            <StackPanel Orientation="Vertical">
+                                <ListBox Margin="0,0,0,5" x:Name="lstNewsTest"></ListBox>
+                                <TextBox Margin="0,0,0,5" x:Name="txtNewsTest"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Button>Aggiungi</Button>
+                                    <Button Grid.Column="1">Elimina</Button>
+                                </Grid>
+                                <Button x:Name="btnNewsTest" Click="btnNewsTest_Click">Esegui test</Button>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+
+                    <StackPanel x:Name="grdNewsBody" Grid.Column="2" Grid.RowSpan="2" VerticalAlignment="Top">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalAlignment="Top">
+                            <DataGrid x:Name="dgrNews">
+
+                            </DataGrid>
+                        </ScrollViewer>
+                    </StackPanel>
+                </Grid>
+        </TabItem>
+        
+            <TabItem Selector.IsSelected="True">
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" ToolTip="Ciao">
+                            <Image x:Name="imgServiziError" Source="img\icons\Error.png" Height="10" Visibility="Collapsed"></Image>
+                            <Label Height="20" Padding="5,2,5,5">Servizi</Label>
+                        </StackPanel>
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+                <Grid x:Name="grdServizi" Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.5*"></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="0.7*"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel x:Name="grdServiziSettings" VerticalAlignment="Top" Grid.RowSpan="2">
+                        <Label HorizontalAlignment="Center" FontSize="18" FontWeight="Bold">Impostazioni</Label>
+                        <Label HorizontalAlignment="Center">Quali servizi visualizzo?</Label>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <Button x:Name="btnServiziAll" Grid.Column="0" IsEnabled="False" Click="btnServiziAll_Click">Tutte</Button>
+                            <Button x:Name="btnServiziOne" Grid.Column="1" Click="btnServiziOne_Click">Una sola</Button>
+                            <Button x:Name="btnServiziUser" Grid.Column="2" Click="btnServiziUser_Click">Utente</Button>
+                            <Grid x:Name="grdServiziChoose" Visibility="Collapsed" Grid.Row="1" Grid.ColumnSpan="3" Margin="0,5,0,0">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Label x:Name="lblServiziID">Che ID ha la news?</Label>
+                                    <TextBox x:Name="txtServiziID" Width="40" PreviewTextInput="NumberValidationTextBox" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">1</TextBox>
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+                        
+                        <Label HorizontalAlignment="Center" Margin="0,10,0,0">Comando HTTP eseguito:</Label>
+                        <Label x:Name="lblHttpServizi" HorizontalAlignment="Center" Margin="0,-8,0,0"></Label>
+                        <GroupBox Header="Test automatici" Margin="0,10,0,0">
+                            <Button x:Name="btnServiziTest">Esegui test</Button>
+                        </GroupBox>
+                    </StackPanel>
+
+                    <StackPanel x:Name="grdServiziBody" Margin="5" Grid.Column="2" Grid.RowSpan="2" VerticalAlignment="Top">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalAlignment="Top">
+                            <DataGrid x:Name="dgrServizi">
+
+                            </DataGrid>
+                        </ScrollViewer>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        
+            <TabItem Header="Impostazioni">
+                <Grid x:Name="grdSettings" Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Vertical" Grid.Column="0" Margin="5" VerticalAlignment="Top">
+                        <Label HorizontalAlignment="Center" FontWeight="Bold" FontSize="16">URL</Label>
+                        <Grid VerticalAlignment="Top" Margin="0,0,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0">Root: </Label>
+                            <TextBox x:Name="txtSettingsRoot" Grid.Column="1" TextChanged="SettingsTextChanged"></TextBox>
+                        </Grid>
+                        
+                        <Line Margin="3,5" StrokeThickness="5" X1="1" X2="1" Y1="1" Y2="1" Fill="#FF280606" Stroke="#FF0F0101"/>
+                        
+                        <Grid VerticalAlignment="Top" Margin="0,0,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0">API News:</Label>
+                            <TextBox x:Name="txtSettingsApiNews" Grid.Column="1" TextChanged="SettingsTextChanged"></TextBox>
+                        </Grid>
+                        <Grid VerticalAlignment="Top" Margin="0,0,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0">API Chat:</Label>
+                            <TextBox x:Name="txtSettingsApiChat" Grid.Column="1" TextChanged="SettingsTextChanged"></TextBox>
+                        </Grid>
+                        <Grid VerticalAlignment="Top" Margin="0,0,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0">API Servizi:</Label>
+                            <TextBox x:Name="txtSettingsApiServizi" Grid.Column="1" TextChanged="SettingsTextChanged"></TextBox>
+                        </Grid>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="5">
+                        <Label HorizontalAlignment="Center" FontWeight="Bold" FontSize="16">Test automatici</Label>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1" Grid.ColumnSpan="3" Orientation="Horizontal">
+                        <Button x:Name="btnSaveSettings" Click="btnSaveSettings_Click">Salva impostazioni</Button>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
             
-            <Label HorizontalAlignment="Center" FontSize="16" Content="Testa manualmente il chatbot"/>
-            <local:BotWindow x:Name="bw" Margin="0,0,-0.4,0.2" Grid.Row="1"></local:BotWindow>
-            <DockPanel Grid.Row="2">
-                <TextBox x:Name="txtQueryBot" HorizontalContentAlignment="Stretch" VerticalAlignment="Top" Height="27" Width="225"/>
-                <Button x:Name="btnSendQuery" HorizontalAlignment="Right" Padding="5" Height="27" VerticalAlignment="Top" Click="btnSendQuery_Click">Parla!</Button>
-            </DockPanel>
+        </TabControl>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Image x:Name="imgStatus" Source="img\icons\Check.png" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15" Margin="5"></Image>
+            <Label x:Name="lblStatus" Grid.Column="1">Status</Label>
+            <Button Grid.Column="2" x:Name="btnUpdate" Click="btnUpdate_Click">Aggiorna</Button>
         </Grid>
-
-
     </Grid>
 </Window>
